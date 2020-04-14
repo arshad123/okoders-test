@@ -1,18 +1,23 @@
 import React, { useEffect, useState } from "react";
 import Form from "./Form";
 import { withStyles, makeStyles } from "@material-ui/core/styles";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
 import Paper from "@material-ui/core/Paper";
 import TablePagination from "@material-ui/core/TablePagination";
 import {
+  Table,
   TableContainer,
+  TableBody,
+  TableCell,
   TableHead,
   TableRow,
   TableFooter,
   Container,
   Grid,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
 } from "@material-ui/core";
 
 const StyledTableCell = withStyles((theme) => ({
@@ -79,8 +84,20 @@ export default function App() {
     };
   }, [page]);
 
-  const handleClickOpen = () => {
-    console.log(1);
+  ///Dialog
+
+  const [open, setOpen] = React.useState(false);
+  const [dialogContent, setDialogContent] = React.useState("x");
+
+  const handleClickOpen = (jsonData) => {
+    const dData = JSON.stringify(jsonData);
+    console.log(dData);
+    setOpen(true);
+    setDialogContent(dData);
+    console.log(dialogContent);
+  };
+  const handleClose = () => {
+    setOpen(false);
   };
 
   console.log(dataList);
@@ -88,6 +105,23 @@ export default function App() {
   return (
     <React.Fragment>
       <Container fixed>
+        <Dialog
+          onClose={handleClose}
+          aria-labelledby="customized-dialog-title"
+          open={open}
+        >
+          <DialogTitle id="customized-dialog-title" onClose={handleClose}>
+            Json Data
+          </DialogTitle>
+          <DialogContent dividers>
+            <code>{dialogContent}</code>
+          </DialogContent>
+          <DialogActions>
+            <Button autoFocus onClick={handleClose} color="primary">
+              Close
+            </Button>
+          </DialogActions>
+        </Dialog>
         <Grid container spacing={3}>
           <Form changeEvent={changeEvent} />
           <TableContainer component={Paper}>
@@ -102,7 +136,10 @@ export default function App() {
               </TableHead>
               <TableBody>
                 {dataList.hits.map((row) => (
-                  <StyledTableRow key={row.objectID} onClick={handleClickOpen}>
+                  <StyledTableRow
+                    key={row.objectID}
+                    onClick={() => handleClickOpen(row)}
+                  >
                     <StyledTableCell component="th" scope="row">
                       {row.title}
                     </StyledTableCell>
