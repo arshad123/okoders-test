@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Form from "./Form";
 import { withStyles, makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -10,9 +11,6 @@ import {
   TableHead,
   TableRow,
   TableFooter,
-  FormControl,
-  Input,
-  InputLabel,
   Container,
   Grid,
 } from "@material-ui/core";
@@ -81,22 +79,17 @@ export default function App() {
     };
   }, [page]);
 
+  const handleClickOpen = () => {
+    console.log(1);
+  };
+
   console.log(dataList);
 
   return (
     <React.Fragment>
       <Container fixed>
         <Grid container spacing={3}>
-          <Grid item xs={12}>
-            <FormControl>
-              <InputLabel htmlFor="my-input">Search</InputLabel>
-              <Input
-                id="my-input"
-                aria-describedby="my-helper-text"
-                onChange={changeEvent}
-              />
-            </FormControl>
-          </Grid>
+          <Form changeEvent={changeEvent} />
           <TableContainer component={Paper}>
             <Table className={classes.table} aria-label="customized table">
               <TableHead>
@@ -109,7 +102,7 @@ export default function App() {
               </TableHead>
               <TableBody>
                 {dataList.hits.map((row) => (
-                  <StyledTableRow key={row.objectID}>
+                  <StyledTableRow key={row.objectID} onClick={handleClickOpen}>
                     <StyledTableCell component="th" scope="row">
                       {row.title}
                     </StyledTableCell>
